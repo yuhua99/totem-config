@@ -90,11 +90,11 @@
             bindings = <&kp>, <&kp>;
 
             #binding-cells = <2>;
-            tapping-term-ms = <200>;
+            tapping-term-ms = <220>;
             quick-tap-ms = <170>;
             flavor = "balanced";
             hold-trigger-key-positions = <26 27 16 15 5 6 7 5 6 7 8 9 15 16 17 18 19 26 27 28 29 31 5 6 7 8 9 15 16 17 18 19 26 27 28 29 30 31 35 36 37 32 33 34>;
-            require-prior-idle-ms = <50>;
+            require-prior-idle-ms = <150>;
             hold-trigger-on-release;
         };
 
