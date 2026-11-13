@@ -1,0 +1,44 @@
+[tasks.install-llvm-tools]
+install_crate = { rustup_component_name = "llvm-tools" }
+
+[tasks.flip-link]
+install_crate = { crate_name = "flip-link", binary = "flip-link", test_arg = ["-h"] }
+
+[tasks.objcopy-dongle]
+install_crate = { crate_name = "cargo-binutils", binary = "cargo", test_arg = ["objcopy", "--help"] }
+command = "cargo"
+args = ["objcopy", "--release", "--bin", "dongle", "--", "-O", "ihex", "totem-dongle.hex"]
+dependencies = ["install-llvm-tools", "flip-link"]
+
+[tasks.uf2-dongle]
+install_crate = { crate_name = "cargo-hex-to-uf2", binary = "cargo", test_arg = ["hex-to-uf2", "--help"] }
+command = "cargo"
+args = ["hex-to-uf2", "--input-path", "totem-dongle.hex", "--output-path", "totem-dongle.uf2", "--family", "nrf52840"]
+dependencies = ["objcopy-dongle"]
+
+[tasks.objcopy-left]
+install_crate = { crate_name = "cargo-binutils", binary = "cargo", test_arg = ["objcopy", "--help"] }
+command = "cargo"
+args = ["objcopy", "--release", "--bin", "left", "--", "-O", "ihex", "totem-left.hex"]
+dependencies = ["install-llvm-tools", "flip-link"]
+
+[tasks.uf2-left]
+install_crate = { crate_name = "cargo-hex-to-uf2", binary = "cargo", test_arg = ["hex-to-uf2", "--help"] }
+command = "cargo"
+args = ["hex-to-uf2", "--input-path", "totem-left.hex", "--output-path", "totem-left.uf2", "--family", "nrf52840"]
+dependencies = ["objcopy-left"]
+
+[tasks.objcopy-right]
+install_crate = { crate_name = "cargo-binutils", binary = "cargo", test_arg = ["objcopy", "--help"] }
+command = "cargo"
+args = ["objcopy", "--release", "--bin", "right", "--", "-O", "ihex", "totem-right.hex"]
+dependencies = ["install-llvm-tools", "flip-link"]
+
+[tasks.uf2-right]
+install_crate = { crate_name = "cargo-hex-to-uf2", binary = "cargo", test_arg = ["hex-to-uf2", "--help"] }
+command = "cargo"
+args = ["hex-to-uf2", "--input-path", "totem-right.hex", "--output-path", "totem-right.uf2", "--family", "nrf52840"]
+dependencies = ["objcopy-right"]
+
+[tasks.uf2]
+dependencies = ["uf2-dongle", "uf2-left", "uf2-right"]

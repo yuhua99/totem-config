@@ -1,0 +1,141 @@
+[keyboard]
+name = "TOTEM"
+product_name = "TOTEM"
+vendor_id = 0x4c4b
+product_id = 0x4643
+manufacturer = "GEIGEIGEIST"
+board = "XIAO BLE"
+
+[host]
+unlock_keys = [[0, 0], [0, 1]]
+
+[ble]
+enabled = true
+default_tx_power = 8
+
+# Unified matrix: 4 rows x 10 cols. Left half = cols 0-4, right half = cols 5-9.
+# Row 3 holds the thumbs (cols 2-4 / 5-7) and the outer pinky keys (col 0 / col 9).
+#
+# Hand markers only matter for `unilateral_tap` (the GUI profile below).
+# (3,9) is marked L on purpose: it carries the GUI/' hold-tap, which should
+# resolve to tap when a left-hand key follows and to hold for right-hand keys
+# and thumbs, same as hold-trigger-key-positions did in the ZMK keymap.
+[layout]
+rows = 4
+cols = 10
+map = """
+         (0,0,L) (0,1,L) (0,2,L) (0,3,L) (0,4,L)    (0,5,R) (0,6,R) (0,7,R) (0,8,R) (0,9,R)
+         (1,0,L) (1,1,L) (1,2,L) (1,3,L) (1,4,L)    (1,5,R) (1,6,R) (1,7,R) (1,8,R) (1,9,R)
+(3,0,L)  (2,0,L) (2,1,L) (2,2,L) (2,3,L) (2,4,L)    (2,5,R) (2,6,R) (2,7,R) (2,8,R) (2,9,R)  (3,9,L)
+                         (3,2,*) (3,3,*) (3,4,*)    (3,5,*) (3,6,*) (3,7,*)
+"""
+
+[[keymap.layer]]
+name = "BASE"
+keys = """
+                        Q  W  E  R  T    Y  U  I      O    P
+                        A  S  D  F  G    H  J  K      L    Semicolon
+MT(Escape, LCtrl, CTL)  Z  X  C  V  B    N  M  Comma  Dot  Slash      MT(Quote, LGui, GUI)
+              LShift  LT(1, SHIFTED(Grave))  Space    Backspace  LT(2, Enter)  LAlt
+"""
+
+[[keymap.layer]]
+name = "NAV"
+keys = """
+       Kc1    Kc2    Kc3          Kc4           Kc5    Kc6   Kc7       Kc8     Kc9  Kc0
+       Left   Down   Up           Right         _      Home  PageDown  PageUp  End  _
+Grave  Minus  Equal  LeftBracket  RightBracket  _      _     _         _       _    _    Backslash
+                     _            _             _      _     MO(3)     _
+"""
+
+[[keymap.layer]]
+name = "SYM"
+keys = """
+                SHIFTED(Kc1)    SHIFTED(Kc2)    SHIFTED(Kc3)          SHIFTED(Kc4)           SHIFTED(Kc5)    SHIFTED(Kc6)  SHIFTED(Kc7)  SHIFTED(Kc8)  SHIFTED(Kc9)  SHIFTED(Kc0)
+                MediaPrevTrack  AudioVolDown    AudioVolUp            MediaNextTrack         _               Left          Down          Up            Right         _
+SHIFTED(Grave)  SHIFTED(Minus)  SHIFTED(Equal)  SHIFTED(LeftBracket)  SHIFTED(RightBracket)  _               _             _             _             _             _             SHIFTED(Backslash)
+                                                _                     MO(4)                  _               _             _             _
+"""
+
+[[keymap.layer]]
+name = "ADJ"
+keys = """
+                          F1         F2         F3       F4          F5           F6  F7  F8  F9  F10
+                          MouseLeft  MouseDown  MouseUp  MouseRight  MouseBtn1    _   _   _   _   F11
+WM(Delete, LCtrl | LAlt)  F11        F12        _        _           MouseBtn2    _   _   _   _   F12  _
+                                                _        _           _            _   _   _
+"""
+
+# User0-2: select BLE profile 0-2 (hold 5s to clear that profile's bond)
+# User5: clear the current profile's bond, User6: toggle USB/BLE output
+[[keymap.layer]]
+name = "SYS"
+keys = """
+       User6  _  _  _  User0    _  _  _  _  _
+       _      _  _  _  User1    _  _  _  _  _
+User5  _      _  _  _  User2    _  _  _  _  _  _
+                 _  _  _        _  _  _
+"""
+
+# Default profile, used by the two LT thumb keys (ZMK &lt: tap-preferred, 200ms).
+# prior_idle_time only applies to profiles with enable_flow_tap = true.
+[behavior.morse]
+enable_flow_tap = false
+prior_idle_time = "150ms"
+hold_timeout = "200ms"
+
+[behavior.morse.profiles]
+# Ctrl/Esc (ZMK mt_all: balanced, 175ms)
+CTL = { permissive_hold = true, hold_timeout = "175ms", quick_tap_timeout = "175ms" }
+# GUI/' (ZMK mt_left: balanced, 220ms, positional hold, require-prior-idle 150ms)
+GUI = { enable_flow_tap = true, permissive_hold = true, unilateral_tap = true, hold_timeout = "220ms", quick_tap_timeout = "170ms" }
+
+# RMK has a single timeout / prior_idle_time for all combos.
+[behavior.combo]
+timeout = "60ms"
+prior_idle_time = "100ms"
+combos = [
+  { actions = ["Q", "W"], output = "Tab" },
+  { actions = ["Semicolon", "MT(Quote, LGui, GUI)"], output = "Minus" },
+  { actions = ["Q", "MT(Escape, LCtrl, CTL)"], output = "SHIFTED(Grave)" },
+  { actions = ["S", "D", "F"], output = "Enter" },
+  { actions = ["J", "K", "L"], output = "Enter" },
+  { actions = ["O", "P"], output = "RightBracket" },
+  { actions = ["I", "O"], output = "LeftBracket" },
+]
+
+[split]
+connection = "ble"
+
+# Dongle: split central with no keys. The empty pin lists must be spelled out.
+[split.central]
+rows = 0
+cols = 0
+row_offset = 0
+col_offset = 0
+
+[split.central.matrix]
+row_pins = []
+col_pins = []
+
+# Left half (peripheral 0). XIAO D0-D3 rows; D4 D5 D10 D9 D8 cols.
+[[split.peripheral]]
+rows = 4
+cols = 5
+row_offset = 0
+col_offset = 0
+
+[split.peripheral.matrix]
+row_pins = ["P0_02", "P0_03", "P0_28", "P0_29"]
+col_pins = ["P0_04", "P0_05", "P1_15", "P1_14", "P1_13"]
+
+# Right half (peripheral 1). XIAO D0-D3 rows; D8 D9 D10 D5 D4 cols.
+[[split.peripheral]]
+rows = 4
+cols = 5
+row_offset = 0
+col_offset = 5
+
+[split.peripheral.matrix]
+row_pins = ["P0_02", "P0_03", "P0_28", "P0_29"]
+col_pins = ["P1_13", "P1_14", "P1_15", "P0_05", "P0_04"]
