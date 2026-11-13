@@ -16,7 +16,16 @@ name = "right"
 path = "src/right.rs"
 
 [dependencies]
-rmk = { git = "https://github.com/rmk-rs/rmk", rev = "708c9ee32f96ac345295819c0925aff2b6a80105", features = ["nrf52840_ble", "split", "async_matrix", "adafruit_bl"] }
+rmk = { git = "https://github.com/rmk-rs/rmk", rev = "708c9ee32f96ac345295819c0925aff2b6a80105", default-features = false, features = [
+    "defmt",
+    "storage",
+    "rynk",
+    "watchdog",
+    "nrf52840_ble",
+    "split",
+    "async_matrix",
+    "adafruit_bl",
+] }
 
 embassy-executor = { version = "0.10", features = [
     "defmt",
@@ -52,11 +61,6 @@ defmt = "1"
 defmt-rtt = "1"
 panic-probe = { version = "1", features = ["print-defmt"] }
 static_cell = "2"
-
-[build-dependencies]
-const-gen = "1.6"
-json = "0.12"
-xz2 = "0.1.7"
 
 [profile.release]
 codegen-units = 1
