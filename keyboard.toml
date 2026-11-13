@@ -107,6 +107,10 @@ combos = [
 [split]
 connection = "ble"
 
+# Battery (both halves): the XIAO BLE reads the cell on P0.31 (AIN7) through a
+# 1M/510k divider whose low side is P0.14. P0.14 must be driven low to measure
+# and must never be driven high while a battery is connected.
+
 # Dongle: split central with no keys. The empty pin lists must be spelled out.
 [split.central]
 rows = 0
@@ -129,6 +133,15 @@ col_offset = 0
 row_pins = ["P0_02", "P0_03", "P0_28", "P0_29"]
 col_pins = ["P0_04", "P0_05", "P1_15", "P1_14", "P1_13"]
 
+[split.peripheral.battery]
+battery_adc_pin = "P0_31"
+adc_divider_measured = 510
+adc_divider_total = 1510
+battery_user_description = "Left"
+
+[[split.peripheral.output]]
+pin = "P0_14"
+
 # Right half (peripheral 1). XIAO D0-D3 rows; D8 D9 D10 D5 D4 cols.
 [[split.peripheral]]
 rows = 4
@@ -139,3 +152,12 @@ col_offset = 5
 [split.peripheral.matrix]
 row_pins = ["P0_02", "P0_03", "P0_28", "P0_29"]
 col_pins = ["P1_13", "P1_14", "P1_15", "P0_05", "P0_04"]
+
+[split.peripheral.battery]
+battery_adc_pin = "P0_31"
+adc_divider_measured = 510
+adc_divider_total = 1510
+battery_user_description = "Right"
+
+[[split.peripheral.output]]
+pin = "P0_14"
