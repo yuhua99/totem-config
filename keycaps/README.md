@@ -16,10 +16,12 @@ contains 9 caps in a 3 × 3 grid and was checked as one valid solid.
 
 Sets 1 and 2 are identical; order two copies of that plate if the uploader
 combines identical files. Neighboring skirts are joined by Ø1.5 × 2.5 mm
-sprues on a 19 × 18 mm pitch. The original thin sprues are retained so
-they can be snipped off after printing. JLC3DP also lists a connection
-thickness requirement greater than 1.5 mm; acceptance of these thin
-sprues has not been confirmed. The sets have not been test-printed.
+sprues at the midpoint of each edge on a 19 × 18 mm pitch. The skirt rims
+are aligned, with the sprue axes 0.70 mm below the rims. This leaves
+about 0.05 mm of overlap at the top of each sprue for easy removal.
+JLC3DP also lists a connection thickness requirement greater than 1.5 mm;
+acceptance of these thin joints has not been confirmed. The sets have
+not been test-printed.
 
 Adapted from [KLP Lamé by braindefender](https://github.com/braindefender/KLP-Lame-Keycaps/tree/8e4b89b484cafe3bcaced6b459a4e29660991a40)
 by arranging the stock keycaps and fusing sprues between them. The STEP is
